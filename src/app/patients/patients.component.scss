@@ -1,0 +1,59 @@
+table {
+  table-layout: fixed;
+  width: 100%;
+
+  td {
+    word-wrap: break-word;
+  }
+}
+
+/*Mobile View*/
+/*Credit: https://codepen.io/AllThingsSmitty/pen/MyqmdM*/
+@media screen and (max-width: 900px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table tr {
+    border-bottom: 3px solid white;
+    display: block;
+    margin-bottom: .625em;
+  }
+
+  table td {
+    border-bottom: 1px solid white;
+    display: block;
+    font-size: .8em;
+    text-align: left;
+  }
+
+  table td::before {
+    content: attr(data-label);
+    float: left;
+    display: block;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+    margin-bottom: 1rem;
+    text-decoration: underline;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
+}

@@ -1,0 +1,146 @@
+<section class="container">
+
+  <div class="row mt-5">
+
+    <!-- Inline Search Form -->
+    <div class="col-12 my-3">
+      <form class="row gy-2 gx-3 align-items-center form-floating" #searchForm="ngForm">
+
+        <div class="col-auto">
+          <div class="form-floating text-dark">
+            <input type="text" [pattern]="'^[a-zA-Z \-\']+'" #givenInput="ngModel" class="form-control" name="given"
+              [(ngModel)]="given" (ngModelChange)="changeDetect()" id="givenName"
+              [ngClass]="{'is-invalid' : givenInput.errors?.pattern }">
+            <label for="firstName" *ngIf="!givenInput.errors?.pattern">First Name</label>
+            <label for="firstName" class="text-danger" *ngIf="givenInput.errors?.pattern">Alphabetic Characters
+              Only</label>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="form-floating text-dark">
+            <input type="text" [pattern]="'^[a-zA-Z \-\']+'" class="form-control" name="family" #familyInput="ngModel"
+              [(ngModel)]="family" (ngModelChange)="changeDetect()" id="familyName"
+              [ngClass]="{'is-invalid' : familyInput.errors?.pattern }">
+            <label for="firstName" *ngIf="!familyInput.errors?.pattern">Last Name</label>
+            <label for="firstName" class="text-danger" *ngIf="familyInput.errors?.pattern">Alphabetic Characters
+              Only</label>
+          </div>
+        </div>
+        <div class="col-auto">
+          <button type="button" (click)="reset()" class="btn btn-warning" [disabled]="!given && !family">
+            Reset
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z" />
+              <path
+                d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z" />
+            </svg>
+          </button>
+
+        </div>
+      </form>
+    </div>
+
+    <!-- Search Results Table -->
+    <div class="col-12">
+      <table class="table table-dark table-responsive table-bordered">
+        <thead>
+          <th>Names</th>
+          <th>Birth Date</th>
+          <th>Gender</th>
+          <th>Address</th>
+          <th>Contact</th>
+        </thead>
+        <!-- Display loading spinner whilst pending -->
+        <ng-container *ngIf="status.pending">
+          <tbody>
+            <tr>
+              <td colspan="5" class="text-center">
+                <div class="spinner-border text-light" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </td>
+            </tr>
+        </ng-container>
+        <tbody>
+          <!-- Display search results when not pending -->
+          <ng-container *ngIf="!status.pending">
+              <!-- For each patient -->
+            <tr *ngFor="let patient of patients">
+                <!-- Display names -->
+              <td data-label="Names">
+                <ng-container *ngIf="patient.names.length">
+                  <ng-container *ngFor="let name of patient.names">
+                    <b>{{name.type | titlecase}}</b>
+
+                    <p>Given: {{name.given}}</p>
+                    <p>Family: {{name.family}}</p>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!patient.names.length">
+                  N/A
+                </ng-container>
+              </td>
+
+              <!-- Birth Date -->
+              <td data-label="Birth Date">
+                <ng-container *ngIf="patient.birthDate">
+                  {{patient.birthDate | date:'fullDate'}}
+                </ng-container>
+                <ng-container *ngIf="!patient.birthDate">
+                  <span>
+                    N/A
+                  </span>
+                </ng-container>
+              </td>
+
+              <!-- Gender -->
+              <td data-label="Gender">
+                {{patient.gender | uppercase}}
+              </td>
+
+              <!-- Address -->
+              <td data-label="Address">
+                <ng-container *ngIf="patient.locations.length">
+                  <ng-container *ngFor="let location of patient.locations">
+                    <div class="my-2">
+                      <b>{{location.type | titlecase}}</b>
+                      <p class="d-block">
+                        {{location.street}} <br />
+                        {{location.city}} <br />
+                        {{location.postalCode}} <br />
+                        {{location.country}}
+                      </p>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!patient.locations.length">
+                  N/A
+                </ng-container>
+              </td>
+
+              <!-- Contact information  -->
+              <td data-label="Contact">
+                <ng-container *ngIf="patient.contact.length">
+                  <ng-container *ngFor="let phone of patient.contact">
+                    <span class="d-block">
+                      <b>{{phone.type | titlecase}}:</b> {{phone.value}}
+                    </span>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!patient.contact.length">
+                  N/A
+                </ng-container>
+              </td>
+
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <!-- Display the response time -->
+    <div class="col-12" *ngIf="!status.pending">
+      <div>Response Time: {{responseTime}} Seconds</div>
+    </div>
+  </div>
+</section>
