@@ -4,6 +4,7 @@
 
     <!-- Inline Search Form -->
     <div class="col-12 my-3">
+        <h1>Patients</h1>
       <form class="row gy-2 gx-3 align-items-center form-floating" #searchForm="ngForm">
 
         <div class="col-auto">
@@ -11,21 +12,29 @@
             <input type="text" [pattern]="'^[a-zA-Z \-\']+'" #givenInput="ngModel" class="form-control" name="given"
               [(ngModel)]="given" (ngModelChange)="changeDetect()" id="givenName"
               [ngClass]="{'is-invalid' : givenInput.errors?.pattern }">
+
             <label for="firstName" *ngIf="!givenInput.errors?.pattern">First Name</label>
-            <label for="firstName" class="text-danger" *ngIf="givenInput.errors?.pattern">Alphabetic Characters
-              Only</label>
+
+            <label for="firstName" class="text-danger" *ngIf="givenInput.errors?.pattern">
+                Alphabetic Characters Only
+            </label>
           </div>
         </div>
+
         <div class="col-auto">
           <div class="form-floating text-dark">
             <input type="text" [pattern]="'^[a-zA-Z \-\']+'" class="form-control" name="family" #familyInput="ngModel"
               [(ngModel)]="family" (ngModelChange)="changeDetect()" id="familyName"
               [ngClass]="{'is-invalid' : familyInput.errors?.pattern }">
-            <label for="firstName" *ngIf="!familyInput.errors?.pattern">Last Name</label>
-            <label for="firstName" class="text-danger" *ngIf="familyInput.errors?.pattern">Alphabetic Characters
-              Only</label>
+            
+              <label for="firstName" *ngIf="!familyInput.errors?.pattern">Last Name</label>
+
+            <label for="firstName" class="text-danger" *ngIf="familyInput.errors?.pattern">
+                Alphabetic Characters Only
+            </label>
           </div>
         </div>
+
         <div class="col-auto">
           <button type="button" (click)="reset()" class="btn btn-warning" [disabled]="!given && !family">
             Reset
@@ -36,8 +45,8 @@
                 d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z" />
             </svg>
           </button>
-
         </div>
+        
       </form>
     </div>
 
@@ -77,6 +86,7 @@
                     <p>Family: {{name.family}}</p>
                   </ng-container>
                 </ng-container>
+
                 <ng-container *ngIf="!patient.names.length">
                   N/A
                 </ng-container>
@@ -84,9 +94,11 @@
 
               <!-- Birth Date -->
               <td data-label="Birth Date">
+
                 <ng-container *ngIf="patient.birthDate">
                   {{patient.birthDate | date:'fullDate'}}
                 </ng-container>
+                
                 <ng-container *ngIf="!patient.birthDate">
                   <span>
                     N/A
@@ -114,9 +126,11 @@
                     </div>
                   </ng-container>
                 </ng-container>
+
                 <ng-container *ngIf="!patient.locations.length">
                   N/A
                 </ng-container>
+
               </td>
 
               <!-- Contact information  -->
@@ -138,7 +152,7 @@
         </tbody>
       </table>
     </div>
-    <!-- Display the response time -->
+    <!-- Display the response time  -->
     <div class="col-12" *ngIf="!status.pending">
       <div>Response Time: {{responseTime}} Seconds</div>
     </div>

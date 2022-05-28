@@ -1,7 +1,126 @@
 <section class="container">
-    <div class="row">
-        <div class="col-12">
-            
+  <div class="row d-flex justify-content-center py-5">
+    <div class="col-sm-12 col-lg-6">
+      <!-- Title -->
+      <h1>Questionnaire</h1>
+
+      <!-- Form -->
+      <form (ngSubmit)="formSubmit()" #questionnaireForm="ngForm">
+
+
+        <ng-container *ngFor="let question of questionnaire.item">
+          <!-- Question Text -->
+          <label class="mt-3" [for]="question.linkId">
+            {{question.text}}
+          </label>
+
+
+
+
+          <!-- Boolean Questions -->
+          <ng-container *ngIf="question.type === 'boolean'">
+            <div class="d-block">
+
+              <div class="form-check-inline">
+                <input required class="form-check-input" [(ngModel)]="answers[question.linkId]" type="radio"
+                  [name]="question.linkId" [id]="question.linkId + 'Yes'" [value]="true">
+                <label class=" mx-1 form-check-label" [for]="question.linkId + 'Yes'">
+                  Yes
+                </label>
+              </div>
+
+
+              <div class="form-check-inline">
+                <input required class="form-check-input" type="radio" [(ngModel)]="answers[question.linkId]"
+                  [name]="question.linkId" [id]="question.linkId + 'No'" [value]="false">
+                <label class=" mx-1 form-check-label" [for]="question.linkId + 'No'">
+                  No
+                </label>
+              </div>
+            </div>
+
+          </ng-container>
+
+
+
+
+          <!-- Select Box / Multi Choice questions -->
+          <ng-container *ngIf="question.type === 'choice'">
+            <select required [name]="question.linkId" [id]="question.linkId" [(ngModel)]="answers[question.linkId]"
+              class="form-control">
+
+              <option value="" selected disabled hidden>Choose</option>
+
+              <ng-container *ngFor="let opt of question.option">
+                <option [value]="opt.valueCoding.code">
+                  {{opt.valueCoding.display}}
+                </option>
+              </ng-container>
+
+            </select>
+          </ng-container>
+
+
+
+          <!-- Date Input Questions -->
+          <ng-container *ngIf="question.type === 'date'">
+            <div class="date-picker-container">
+              <input required [(ngModel)]="answers[question.linkId]" (ngModelChange)="checkDate(question.linkId)"
+                type="date" class="form-control" [ngClass]="{'is-invalid' : dateErrors[question.linkId] }"
+                [name]="question.linkId" [id]="question.linkId">
+
+              <div *ngIf="dateErrors[question.linkId]" class="text-danger">
+                Can't set to a future date
+              </div>
+            </div>
+          </ng-container>
+
+
+
+          <!-- String Input Questions -->
+          <ng-container *ngIf="question.type === 'string'">
+            <input type="text" [pattern]="'^[a-zA-Z \-\']+'" #stringInput="ngModel"
+              [(ngModel)]="answers[question.linkId]" class="form-control" [name]="question.linkId"
+              [id]="question.linkId" [ngClass]="{'is-invalid' : stringInput.errors?.pattern}" placeholder="...">
+
+            <div *ngIf="stringInput.errors?.pattern" class="text-danger">
+              Alphabetic characters only
+            </div>
+          </ng-container>
+        </ng-container>
+
+
+
+        <!-- Form Submit  -->
+        <div class="row">
+          <div class="col-12 d-flex justify-content-end">
+            <button [disabled]="!validDates() || questionnaireForm.invalid" class="btn btn-success" type="submit">
+              Submit
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2"
+                viewBox="0 0 16 16">
+                <path
+                  d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+              </svg>
+            </button>
+          </div>
         </div>
+
+      </form>
+      <!-- Form END -->
     </div>
+  </div>
+
+  <!-- Form Results -->
+  <div *ngIf="submitted" class="row d-flex justify-content-center py-5">
+    <div class="col-sm-12 col-lg-6">
+      <div class="card">
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let result of results" class="list-group-item">
+            {{result.question}}: {{result.answer}}
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
 </section>

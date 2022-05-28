@@ -27,19 +27,26 @@ import {
 export class PatientsComponent implements OnInit, OnDestroy {
   // Page load status
   public status: {pending: boolean} = {pending: true};
+
   // API call response time
   public responseTime: number = 0;
+
   // List of our patients
   public patients: Array < Patient > = [];
+
   // Given name input text
   public given: string = '';
+
   // Family name input text
   public family: string = '';
+
   // Subscription array
   public subs: any[] = [];
+
   // Search form
   @ViewChild('searchForm')
   public searchForm: any;
+
   // Search subject
   public search$: Subject < void > = new Subject();
 
@@ -70,6 +77,8 @@ export class PatientsComponent implements OnInit, OnDestroy {
     this.subs.push(searchSub);
   }
 
+
+
   /**
    * Got Patients handler
    * @param res Patient call result
@@ -92,6 +101,9 @@ export class PatientsComponent implements OnInit, OnDestroy {
     // Tell the page we are finished
     this.status.pending = false;
   }
+
+
+
   /**
    * Error handler
    * @param err 
@@ -99,6 +111,7 @@ export class PatientsComponent implements OnInit, OnDestroy {
   private err = (err: any) => {
     console.error('Could not get data')
   }
+
 
 
   /**
@@ -122,6 +135,8 @@ export class PatientsComponent implements OnInit, OnDestroy {
     this.search$.next();
   }
 
+
+  
   /**
    * Called when we leave the page
    */
